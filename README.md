@@ -1,3 +1,5 @@
+[![PEP8](https://github.com/cybergis/PSONotebook/actions/workflows/PEP8.yml/badge.svg)](https://github.com/cybergis/PSONotebook/actions/workflows/PEP8.yml)
+
 # Introduction to Particle Swarm Optimization
 
 ![Gif of Particle Swarm Optimization](img/movie.gif)

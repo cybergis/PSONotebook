@@ -1,4 +1,3 @@
-import warnings
 from cost_funcs.standard import *
 from cost_funcs import Env, Human
 from PSOHelper import *
@@ -9,6 +8,7 @@ import os
 import pickle
 import pandas as pd
 import matplotlib
+import warnings
 matplotlib.use('agg')
 
 sys.path.append('../')

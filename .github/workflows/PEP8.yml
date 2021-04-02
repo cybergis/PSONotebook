@@ -1,0 +1,22 @@
+name: PEP8
+
+on: [push]
+
+jobs:
+  flake8-lint:
+    runs-on: ubuntu-latest
+    name: PEP8
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python environment
+        uses: actions/setup-python@v1
+        with:
+          python-version: "3.x"
+
+      - name: flake8 Lint Check
+        uses: py-actions/flake8@v1
+        with:
+          path: "PSOHelper.py PSO.py cost_funcs/info.py cost_funcs/standard.py cost_funcs/JeonModelSimple.py "
+          args: "--show-source --ignore E501,E722,F403,F405 --statistics"

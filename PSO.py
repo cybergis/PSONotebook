@@ -164,7 +164,8 @@ class PSO():
                 if key not in ["function", "dim_description"] and isinstance(value, str):
                     self.function_selection_string += "-{}:{}".format(
                         key, value)
-
+        if not os.path.exists("logs/"):
+            os.mkdir("logs/")
         self.log_file = join('logs/', 'swarmp-on_{}-({}particles--{}processes){}-{}.log'.format(
             self.costFunc.__name__, self.num_particles, self.threads, self.function_selection_string, DATE))
         log.basicConfig(format='[%(asctime)s] %(message)s',
@@ -185,6 +186,8 @@ class PSO():
         self.set_neighbor_graph(self.topology)
 
         # outputs subdirectory to write to
+        if not os.path.exists("./outputs"):
+            os.mkdir("./outputs")
         if args['seed'] == "None":
             self.output_path = os.path.join("outputs/", "{}-swarm-{}-opt-{}-({}particles-{}processes)".format(
                 args["output_dir"], DATE, self.costFunc.__name__, self.num_particles, self.threads))

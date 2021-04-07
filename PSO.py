@@ -291,9 +291,8 @@ class PSO():
             for i in range(n):
                 self.neighbor_graph[i, (i + 1) % n] = 1
                 self.neighbor_graph[(i + 1) % n, i] = 1
-            for i in range(n):
                 self.neighbor_graph[i, (i + r) % n] = 1
-                self.neighbor_graph[(i + r) % n, 1] = 1
+                self.neighbor_graph[(i + r) % n, i] = 1
         log.debug("\n{}".format(self.neighbor_graph))
 
     def finished(self, iteration):
@@ -371,8 +370,7 @@ class PSO():
             return iteration >= self.max_iterations  # add more end conditions
 
     def optimize(self):
-        if self.threads > 1:
-            pool = mp.Pool(processes=self.threads)
+        pool = mp.Pool(processes=self.threads)
         err_best_arr = []
         for i in range(self.num_particles):
             err_best_arr.append(float("inf"))
@@ -397,15 +395,9 @@ class PSO():
             log.debug("    i: {}\n    err_best: {}\n    pos_best {}".format(
                 iteration, self.err_best_g, self.pos_best_g))
             results = []
-            if self.threads > 1:
-                log.debug("...entering pool mapping...")
-                results = pool.map(eval_pos_unpacker, zip(self.swarm, range(
-                    self.num_particles), itertools.repeat(self.costFunc), itertools.repeat(self.function)))
-            else:
-                log.debug("...looping over particles...")
-                for j in range(self.num_particles):
-                    results.append(evaluate_position(
-                        self.swarm[j], j, self.costFunc, self.function))
+            log.debug("...entering pool mapping...")
+            results = pool.map(eval_pos_unpacker, zip(self.swarm, range(
+                self.num_particles), itertools.repeat(self.costFunc), itertools.repeat(self.function)))
             log.debug("...pool mapping exited...")
             results.sort()
             log.debug("...pool results sorted...")
@@ -482,7 +474,7 @@ class PSO():
         fig = plt.gcf()
         fig.set_size_inches(8, 6)
         fig.savefig('Swarm.png', dpi=250)
-        plt.show()
+        # plt.show()
         plt.close('all')
 
     def generate_gif(self, frames_per_iter=1, end_pause=3):
@@ -541,7 +533,7 @@ class PSO():
         fig = plt.gcf()
         fig.set_size_inches(8, 6.7)
         plt.tight_layout()
-        plt.show()
+        # plt.show()
         plt.savefig("{}/PSO-T{}.png".format(self.output_path,
                     len(self.swarm_positions)))
         fig.clf()
@@ -591,7 +583,7 @@ class PSO():
         fig = plt.gcf()
         fig.set_size_inches(12, 10)
         plt.tight_layout()
-        plt.show()
+        # plt.show()
         plt.savefig("{}/surface.png".format(self.output_path))
         fig.clf()
 
@@ -637,7 +629,7 @@ def main():
 
     print(json.dumps(args, indent=4, sort_keys=True))
 
-    print("Swarming with {} particles on {} using {} termination criterion with {} vmax".format(
+    print("Swarming with {} particles on {} threads using {} termination criterion with {} vmax".format(
         args['particles'], args['threads'], args['termination']['termination_criterion'], args['max_velocity']))
     if args["function"]["function"] == "eggholder":
         print("Running Eggholder....\n")

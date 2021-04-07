@@ -1,5 +1,6 @@
 outputs/
 logs/
+.vscode
 
 #### Below is Python.gitignore from : https://github.com/github/gitignore/blob/master/Python.gitignore
  

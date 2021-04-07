@@ -16,7 +16,6 @@ from time import localtime, strftime
 from os.path import join
 import multiprocessing as mp
 import numpy as np
-from scipy.spatial.distance import cdist
 matplotlib.use('agg')
 logging.getLogger("matplotlib").setLevel(logging.WARNING)
 # logging.getLogger("imageio").setLevel(logging.WARNING)
@@ -149,26 +148,10 @@ class PSO():
             self.dim_description = None
 
         self.termination_criterion = args['termination']['termination_criterion']
-
-        if self.termination_criterion == "convergence":
-            self.swarm_distance = []
-            self.steps_converging = args['termination']['steps_converging']
-        elif self.termination_criterion == "closeness":
-            self.how_close = args['termination']['how_close']
-        elif self.termination_criterion == "improvement_average_best":
-            self.swarm_average_errors = []
-            self.steps_improving = args['termination']['steps_improving']
-        elif self.termination_criterion == "improvement_average_current":
-            self.swarm_average_errors = []
-            self.steps_improving = args['termination']['steps_improving']
-        elif self.termination_criterion == "improvement_gbest":
-            self.swarm_global_best_error = []
-            self.steps_improving = args['termination']['steps_improving']
-        elif self.termination_criterion == "iterations":
+        if self.termination_criterion == "iterations":
             self.max_iterations = args['termination']['max_iterations']
-        elif self.termination_criterion == "MaxDistQuick":
-            self.maxdistquick_p = args['termination']['maxdistquick_p']
-            self.maxdistquick_m = args['termination']['maxdistquick_m']
+        else:
+            raise Exception("Select a valid termination criterion")
 
         self.swarm_costs = []
         self.swarm_positions = []
@@ -210,7 +193,6 @@ class PSO():
                 args["output_dir"], DATE, self.costFunc.__name__, self.num_particles, self.threads, args['seed']))
         if not os.path.exists(self.output_path):
             os.makedirs(self.output_path)
-
         self.csv_out = open(join(self.output_path, 'swarmp-on_{}-({}particles-{}processes){}-{}.csv'.format(
             self.costFunc.__name__, self.num_particles, self.threads, self.function_selection_string, DATE)), "w+")
 
@@ -296,78 +278,7 @@ class PSO():
         log.debug("\n{}".format(self.neighbor_graph))
 
     def finished(self, iteration):
-        if self.termination_criterion == "convergence":
-            points = [particle.position_i for particle in self.swarm]
-            hdist = cdist(points, points, metric='euclidean')
-            self.swarm_distance.append(max(map(max, hdist)))
-            _to_return = False
-            if len(self.swarm_distance) > self.steps_converging:
-                _to_return = all(i > j for i, j in zip(
-                    self.swarm_distance[-self.steps_converging:], self.swarm_distance[- (self.steps_converging - 1):]))
-            log.debug("Max distance between particles: {}".format(
-                self.swarm_distance[iteration]))
-            if not self.headless:
-                print("Max distance between particles: {}".format(
-                    self.swarm_distance[iteration]))
-            return _to_return
-        elif self.termination_criterion == "closeness":
-            points = [particle.position_i for particle in self.swarm]
-            hdist = cdist(points, points, metric='euclidean')
-            log.debug("Max distance between particles: {}".format(
-                max(map(max, hdist))))
-            if not self.headless:
-                print("Max distance between particles: {}".format(
-                    max(map(max, hdist))))
-            return (max(map(max, hdist)) < self.how_close and iteration > 5)
-        elif self.termination_criterion == "improvement_gbest":
-            self.swarm_global_best_error.append(self.err_best_g)
-            _to_return = False
-            if len(self.swarm_global_best_error) > self.steps_improving:
-                _to_return = all(i <= j for i, j in zip(
-                    self.swarm_global_best_error[-self.steps_improving:], self.swarm_global_best_error[-(self.steps_improving - 1):]))
-            log.debug("Global best error is: {}".format(self.err_best_g))
-            if not self.headless:
-                print("Global best error is: {}".format(self.err_best_g))
-            return _to_return
-        elif self.termination_criterion == "improvement_average_best":
-            self.swarm_average_errors.append(
-                np.mean([swarm.err_best_i for swarm in self.swarm]))
-            _to_return = False
-            if len(self.swarm_average_errors) > self.steps_improving:
-                _to_return = all(i <= j for i, j in zip(
-                    self.swarm_average_errors[-self.steps_improving:], self.swarm_average_errors[-(self.steps_improving - 1):]))
-            log.debug("Average best error for swarm is: {}".format(
-                self.swarm_average_errors[-1]))
-            if not self.headless:
-                print("Average best error for swarm is: {}".format(
-                    self.swarm_average_errors[-1]))
-            return _to_return
-        elif self.termination_criterion == "improvement_average_current":
-            self.swarm_average_errors.append(
-                np.mean([swarm.err_i for swarm in self.swarm if swarm.err_i != float("inf")]))
-            _to_return = False
-            if len(self.swarm_average_errors) > 20:
-                _to_return = all(i <= j for i, j in zip(
-                    self.swarm_average_errors[-self.steps_improving:], self.swarm_average_errors[-(self.steps_improving - 1):]))
-            log.debug("Average current error for swarm is: {}".format(
-                self.swarm_average_errors[-1]))
-            if not self.headless:
-                print("Average current error for swarm is: {}".format(
-                    self.swarm_average_errors[-1]))
-            return _to_return
-        elif self.termination_criterion == "MaxDistQuick":
-            _l = [(i, self.swarm[i].err_best_i)
-                  for i in range(len(self.swarm))]
-            _l.sort(key=lambda x: x[1])
-            points = [self.swarm[i[0]].position_i for i in _l[:int(
-                self.maxdistquick_p * len(self.swarm))]]
-            _max_dist = np.max(cdist([points[0]], points, metric='euclidean'))
-            log.debug("Max distance between particles: {}".format(_max_dist))
-            if not self.headless:
-                print("Max distance between particles: {}".format(_max_dist))
-            return (_max_dist < self.maxdistquick_m and iteration > 5)
-        else:
-            return iteration >= self.max_iterations  # add more end conditions
+        return iteration >= self.max_iterations  # add more end conditions
 
     def optimize(self):
         pool = mp.Pool(processes=self.threads)
@@ -378,9 +289,10 @@ class PSO():
         for i in range(self.num_particles):
             pos_to_update.append([])
         iteration = 0
-        print("|-----+-------------------+-----------------------------------------")
-        print("| Gen | Global Best Error | Global Best Pos ")
-        print("|-----+-------------------+-----------------------------------------")
+        if not self.headless:
+            print("|-----+-------------------+-----------------------------------------")
+            print("| Gen | Global Best Error | Global Best Pos ")
+            print("|-----+-------------------+-----------------------------------------")
         while not self.finished(iteration):
             self.function["curr_best"] = self.err_best_g
             self.function["iteration"] = iteration
@@ -448,7 +360,8 @@ class PSO():
                 self.plot_surface_this_timestep()
             iteration += 1
             self._number_of_iterations = iteration
-        print("|-----+-------------------+-----------------------------------------")
+        if not self.headless:
+            print("|-----+-------------------+-----------------------------------------")
         if self.threads > 1:
             pool.close()
             pool.join()

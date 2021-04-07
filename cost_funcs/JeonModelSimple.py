@@ -1,17 +1,17 @@
-from cost_funcs.standard import *
-from cost_funcs import Env, Human
-from PSOHelper import *
-import sys
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pickle
 import pandas as pd
 import matplotlib
+import sys
 import warnings
-matplotlib.use('agg')
-
 sys.path.append('../')
+from cost_funcs.standard import *  # noqa: E402
+from cost_funcs import Env, Human  # noqa: E402
+from PSOHelper import *  # noqa: E402
+
+matplotlib.use('agg')
 
 # gets rid of matplotlib font warnings in the logging
 warnings.filterwarnings("ignore")

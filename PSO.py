@@ -1,8 +1,10 @@
 from cost_funcs.info import *
+from PSOHelper import str2bool
 import matplotlib.pyplot as plt
 import argparse
 import csv
 import copy
+from datetime import datetime
 import itertools
 import json
 import logging
@@ -12,7 +14,6 @@ import os
 import random
 import sys
 import logging as log
-from time import localtime, strftime
 from os.path import join
 import multiprocessing as mp
 import numpy as np
@@ -157,7 +158,7 @@ class PSO():
         self.swarm_positions = []
         self.swarm_vel = []
 
-        DATE = '{}'.format(strftime('%Y-%m-%d_%H:%M:%S', localtime()))
+        DATE = datetime.utcnow().strftime('%Y-%m-%d-b%H:%M:%S.%f')
         self.function_selection_string = ""
         if (len(self.function) > 1):
             for key, value in self.function.items():
@@ -166,8 +167,8 @@ class PSO():
                         key, value)
         if not os.path.exists("logs/"):
             os.mkdir("logs/")
-        self.log_file = join('logs/', 'swarmp-on_{}-({}particles--{}processes){}-{}.log'.format(
-            self.costFunc.__name__, self.num_particles, self.threads, self.function_selection_string, DATE))
+        self.log_file = join('logs/', 'swarmp-on_{}-({}particles--{}processes){}-{}-{}.log'.format(
+            self.costFunc.__name__, self.num_particles, self.threads, self.function_selection_string, DATE, hex(random.getrandbits(24))))
         log.basicConfig(format='[%(asctime)s] %(message)s',
                         datefmt='%m/%d/%Y %H:%M:%S %p', filename=self.log_file, level=log.DEBUG)
 
@@ -189,11 +190,15 @@ class PSO():
         if not os.path.exists("./outputs"):
             os.mkdir("./outputs")
         if args['seed'] == "None":
-            self.output_path = os.path.join("outputs/", "{}-swarm-{}-opt-{}-({}particles-{}processes)".format(
-                args["output_dir"], DATE, self.costFunc.__name__, self.num_particles, self.threads))
+            self.output_path = os.path.join("outputs/", "{}-swarm-{}-opt-{}-({}particles-{}processes){}".format(
+                args["output_dir"], DATE, self.costFunc.__name__, self.num_particles, self.threads,
+                hex(random.getrandbits(24))))
         else:
-            self.output_path = os.path.join("outputs/", "{}-swarm-{}-opt-{}-({}particles-{}processes)s{}".format(
-                args["output_dir"], DATE, self.costFunc.__name__, self.num_particles, self.threads, args['seed']))
+            self.output_path = os.path.join("outputs/", "{}-swarm-{}-opt-{}-({}particles-{}processes){}s{}".format(
+                args["output_dir"], DATE, self.costFunc.__name__, self.num_particles, self.threads,
+                hex(random.getrandbits(24)), args['seed']))
+        if os.path.exists(self.output_path):
+            self.output_path = self.output_path + "_{}".format(hex(random.getrandbits(24)))
         if not os.path.exists(self.output_path):
             os.makedirs(self.output_path)
         self.csv_out = open(join(self.output_path, 'swarmp-on_{}-({}particles-{}processes){}-{}.csv'.format(
@@ -250,6 +255,7 @@ class PSO():
         logger = log.getLogger()
         handlers = logger.handlers[:]
         for handler in handlers:
+            handler.flush()
             handler.close()
             logger.removeHandler(handler)
 
@@ -514,17 +520,6 @@ def setup_parser():
     parser.add_argument('-s', type=int, required=False,
                         dest='random_seed', help='Seed for a random number generator')
     return parser.parse_args()
-
-
-def str2bool(v):
-    if isinstance(v, bool):
-        return v
-    if v.lower() in ('yes', 'true', 't', 'y', '1'):
-        return True
-    elif v.lower() in ('no', 'false', 'f', 'n', '0', 'None'):
-        return False
-    else:
-        raise argparse.ArgumentTypeError('Boolean value expected.')
 
 
 def main():

@@ -2,7 +2,6 @@ import cost_funcs.info as info
 import PSO
 import copy
 import os
-import subprocess
 
 
 simple_params = {

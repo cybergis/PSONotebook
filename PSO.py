@@ -1,15 +1,16 @@
 from cost_funcs.info import *
 from PSOHelper import str2bool
-import matplotlib.pyplot as plt
 import argparse
 import csv
 import copy
 from datetime import datetime
+import imageio
 import itertools
 import json
 import logging
 import math
 import matplotlib
+import matplotlib.pyplot as plt
 import os
 import random
 import sys
@@ -400,7 +401,6 @@ class PSO():
         plt.close('all')
 
     def generate_gif(self, frames_per_iter=1, end_pause=3):
-        import imageio
         images = []
         for plot in range(2, self._number_of_iterations + 1):
             img = imageio.imread(

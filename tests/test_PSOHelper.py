@@ -17,7 +17,13 @@ def test_str2bool_string():
     assert PSOHelper.str2bool("faLsE") is False
 
 
-def test_rmse_same_len_order_one():
-    for length in range(10):
+def test_mae_same_len():
+    for length in range(1, 10):
         first, second = [-1] * length, [1] * length
-        assert PSOHelper.rmse(first, second, order=2) == 2 * length
+        assert PSOHelper.mae(first, second) == 2
+
+
+def test_rmse_same_len():
+    for length in range(1, 10):
+        first, second = [-1] * length, [1] * length
+        assert PSOHelper.rmse(first, second) == 2

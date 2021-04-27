@@ -410,7 +410,7 @@ class PSO():
             if plot == self._number_of_iterations:
                 for i in range(end_pause - frames_per_iter):
                     images.append(img)
-        imageio.mimsave('{}/movie.gif'.format(self.output_path), images)
+        imageio.mimwrite('{}/movie.gif'.format(self.output_path), images)
 
     def plot_surface_this_timestep(self, dims=(0, 1), dim_labels=("x", "y"), granularity=200.0):
         X, Y = self.bounds[dims[0]], self.bounds[dims[1]]

@@ -337,11 +337,11 @@ class PSO():
                     self.pos_best_g = list(self.swarm[j].position_i)
                     self.err_best_g = float(self.swarm[j].err_i)
             self.swarm_costs.append(
-                [particle.err_i for particle in self.swarm])
+                copy.deepcopy([particle.err_i for particle in self.swarm]))
             self.swarm_positions.append(
-                [particle.position_i for particle in self.swarm])
+                copy.deepcopy([particle.position_i for particle in self.swarm]))
             self.swarm_vel.append(
-                [particle.velocity_i for particle in self.swarm])
+                copy.deepcopy([particle.velocity_i for particle in self.swarm]))
 
             log.debug("New best error: {}\nNew best position: {}".format(
                 self.err_best_g, self.pos_best_g))
@@ -543,39 +543,21 @@ def main():
     print("Swarming with {} particles on {} threads using {} termination criterion with {} vmax".format(
         args['particles'], args['threads'], args['termination']['termination_criterion'], args['max_velocity']))
     if args["function"]["function"] == "eggholder":
-        print("Running Eggholder....\n")
-        bounds = []
-        for j in range(2):
-            bounds.append((-512, 512))
-        return PSO(eggholder, bounds, args)
-        print("True min is -959.6407 at (512, 404.2319)")
+        return PSO(eggholder, get_bounds(eggholder, 2), args)
     elif args["function"]["function"] == "michal":
-        print("Running {}D Michal....\n".format(args["function"]["dimension"]))
-        bounds = []
-        for j in range(args["function"]["dimension"]):
-            bounds.append((0, math.pi))
-        return PSO(michal, bounds, args)
+        return PSO(michal, get_bounds(michal, 2), args)
+    elif args["function"]["function"] == "noisey_paraboloid":
+        return PSO(noisey_paraboloid, get_bounds(noisey_paraboloid, 2), args)
     elif args["function"]["function"] == "paraboloid":
-        print("Running Paraboloid....\n")
-        # input bounds [(x1_min,x1_max),(x2_min,x2_max)...] #CPMC, RDSE resolution,
-        bounds = [(-100, 100), (-100, 100)]
-        return PSO(paraboloid, bounds, args)
+        return PSO(paraboloid, get_bounds(paraboloid, 2), args)
     elif args["function"]["function"] == "shubert":
-        print("Running Shubert....\n")
-        # input bounds [(x1_min,x1_max),(x2_min,x2_max)...] #CPMC, RDSE resolution,
-        bounds = [(-10, 10), (-10, 10)]
-        return PSO(shubert, bounds, args)
+        return PSO(shubert, get_bounds(shubert, 2), args)
     elif args["function"]["function"] == "rastrigin":
-        print("Running Rastrigin... ")
-        print(get_bounds(rastrigin, args["function"]["dimension"]))
         return PSO(rastrigin, get_bounds(rastrigin, args["function"]["dimension"]), args)
     elif args["function"]["function"] == "kang_simple":
-        print("Running Jeon Simple....")
-        bounds = [(0.0001, 0.1), (1, 4), (0.001, 1)]
-        return PSO(kang_simple, bounds, args)
+        return PSO(kang_simple, get_bounds(kang_simple, 3), args)
     else:
-        print(
-            "Invalid cost function supplied. Please use a valid cost function for cost_func")
+        print("Please use a valid cost function for cost_func")
 
 
 if __name__ == "__main__":

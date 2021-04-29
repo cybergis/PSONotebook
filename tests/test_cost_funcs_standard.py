@@ -19,4 +19,4 @@ def test_rastrigin_global_min_d2():
 
 
 def test_get_standard_funcs():
-    assert len(std.get_standard_funcs()) == 5
+    assert len(std.get_standard_funcs()) == 6

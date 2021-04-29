@@ -4,7 +4,9 @@
 
 # Introduction to Particle Swarm Optimization
 
-**Authors:** Alexander Michels, Jeon-Young Kang, Shaowen Wang
+**Authors:** [Alexander Michels](https://scholar.google.com/citations?user=EbmZrwYAAAAJ), [Jeon-Young Kang](https://scholar.google.com/citations?user=u5cevWAAAAAJ), [Shaowen Wang](https://scholar.google.com/citations?user=qcUhJIcAAAAJ)
+
+Special thanks to [Zhiyu Li](https://scholar.google.com/citations?user=yskFOAgAAAAJ) and [Rebecca Vandewalle](https://scholar.google.com/citations?user=1WzQbAgAAAAJ) for suggestions and feedback on this notebook!
 
 [Open with CyberGISX](https://cybergisx.cigi.illinois.edu/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2Fcybergis%2FPSONotebook&urlpath=tree%2FPSONotebook%2FIntroToParticleSwarmOptimization.ipynb&branch=master)
 

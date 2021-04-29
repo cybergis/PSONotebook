@@ -12,6 +12,8 @@ def get_bounds(function, dim):
         for i in range(dim):
             bounds.append((0, math.pi))
         return bounds
+    elif function == noisey_paraboloid:
+        return [(-10, 10), (-10, 10)]
     elif function == paraboloid:
         return [(-100, 100), (-100, 100)]
     elif function == shubert:
@@ -30,6 +32,8 @@ def get_function_name(function):
         return "Eggholder Function"
     elif function == michal:
         return "Michalewicz Function"
+    elif function == noisey_paraboloid:
+        return "Noisey Paraboloid"
     elif function == paraboloid:
         return "Paraboloid"
     elif function == shubert:
@@ -50,6 +54,8 @@ def get_global_minima(function, dim):
             return (-4.687658, None)
         elif dim == 10:
             return (-9.66015, None)
+    elif function == noisey_paraboloid:
+        return (0, (0, 0))
     elif function == paraboloid:
         return (0, (0, 0))
     elif function == shubert:

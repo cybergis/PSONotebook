@@ -1,4 +1,5 @@
 import math
+import random
 
 
 def eggholder(args):
@@ -14,6 +15,11 @@ def michal(args):
     for i in range(len(x)):
         sum -= math.sin(x[i]) * math.sin(((i + 1) * x[i] ** 2) / math.pi) ** 20
     return (sum, None)
+
+
+def noisey_paraboloid(args):
+    x = args["x"]
+    return (x[0] ** 2 + x[1] ** 2 + random.uniform(-10, 10), None)
 
 
 def paraboloid(args):
@@ -42,5 +48,5 @@ def rastrigin(args):
 
 
 def get_standard_funcs():
-    funcs = [eggholder, michal, paraboloid, shubert, rastrigin]
+    funcs = [eggholder, michal, noisey_paraboloid, paraboloid, shubert, rastrigin]
     return [(func.__name__, func) for func in funcs]

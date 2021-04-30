@@ -1,25 +1,28 @@
 import matplotlib.pyplot as plt
-import numpy as np
-import os
-import pickle
-import pandas as pd
 import matplotlib
+import numpy as np
+import pandas as pd
+import pickle
+import os
 import sys
 import warnings
+
+
+matplotlib.use('agg')
+
 sys.path.append('../')
 from cost_funcs.standard import *  # noqa: E402
 from cost_funcs import Env, Human  # noqa: E402
 from PSOHelper import *  # noqa: E402
 
-matplotlib.use('agg')
-
-# gets rid of matplotlib font warnings in the logging
+# gets ride of matplotlib font warnings in the logging
 warnings.filterwarnings("ignore")
 
 
-def JeonModelSimple(introRate=0.002, reproduction=2.4, infRate=0.18, city="Miami", days=148, metric="rmse"):
+def JeonModelSimple(introRate=0.002, reproduction=2.4, infRate=0.18, city="Miami", days=154, metric="rmse"):
     DATA_PATH = os.path.join(os.path.dirname(
         os.path.abspath(__file__)), "data/{}".format(city))
+    houses = pd.read_csv('{}/houses_points.csv'.format(DATA_PATH))
     try:  # try to open the preprocessed data
         with open("{}/schoolList.pickle".format(DATA_PATH), "rb") as f:
             schoolList = pickle.load(f)
@@ -49,6 +52,7 @@ def JeonModelSimple(introRate=0.002, reproduction=2.4, infRate=0.18, city="Miami
         peopleList = Human.settingHumanAgent(houseList)
         with open("{}/peopleList.pickle".format(DATA_PATH), "wb") as f:
             pickle.dump(peopleList, f)
+    days = 148
     # the list for counting infectious people over simulation days.
     infectiousCount = []
     # initial infections based on the introRate
@@ -76,10 +80,12 @@ def JeonModelSimple(introRate=0.002, reproduction=2.4, infRate=0.18, city="Miami
         model_for_rmse, observed, resolution)
     actual = normalize(actual)
     score = 0
-    if metric == "rmse":
-        score = rmse(model_for_rmse, actual)   # calculate RMSE
-    elif metric == "max_by_rmse":
-        score = max_by_rmse(model_for_rmse, actual)
+    if metric == "absolute_error":
+        score = absolute_error(model_for_rmse, actual)
+    elif metric == "mae":
+        score = mae(model_for_rmse, actual)
+    elif metric == "rmse":
+        score = rmse(model_for_rmse, actual)
     return (score, infectiousCount)
 
 
@@ -110,14 +116,13 @@ def get_observations(path):
     return actual, res
 
 
-# add back interpolation here if needed
 def match_resolutions(model, actual, resolution):
     model = model[(resolution - 1)::resolution]
     _min = min(len(model), len(actual))
     return model[:_min], actual[:_min]
 
 
-def match_length_runs(runs, actual):  # add back interpolation here if needed
+def match_length_runs(runs, actual):
     _min = 7 * len(actual)
     for particle in range(len(runs)):
         if runs[particle] is not None:
@@ -164,6 +169,8 @@ def visualize_iteration(iteration_number, runs, city="QueenAnne", output_dir="")
 
 
 def kang_simple(args):
+    # print("...in kang_simple...")
+    # pprint(args)
     x = args["x"]
     return JeonModelSimple(introRate=x[0], reproduction=x[1], infRate=x[2], city=args["city"], days=args["days"], metric=args["metric"])
 

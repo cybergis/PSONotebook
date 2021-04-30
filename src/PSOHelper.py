@@ -17,6 +17,14 @@ def pprint(data):
     print(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
 
 
+def absolute_error(first, second):
+    _len = min(len(first), len(second))
+    diffs = 0
+    for i in range(_len):
+        diffs += abs(first[i] - second[i])
+    return diffs
+
+
 def mae(first, second):
     _len = min(len(first), len(second))
     diffs = 0

@@ -133,7 +133,6 @@ class PSO():
         self.function = args["function"]
         self.gif = str2bool(args['gif'])
         self.headless = str2bool(args['headless'])
-        self.metric = args['metric']
         self.num_particles = args['particles']
         if args['seed'] != "None":
             random.seed(args['seed'])

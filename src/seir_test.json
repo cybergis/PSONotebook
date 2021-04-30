@@ -1,0 +1,21 @@
+{
+    "gif" : "False",
+    "headless" : "False",
+    "max_velocity" : "inf",
+    "output_dir" : "seir_test/",
+    "particles" : 2,
+    "seed" : "None",
+    "threads" : 2,
+    "topology" : "vonNeumann",
+    "termination": {
+        "termination_criterion" : "iterations",
+        "max_iterations" : 2
+    },
+    "function": {
+        "city" : "Miami",
+        "days" : 154,
+        "metric" : "absolute_error",
+        "dim_description" : ["introRate","reproduction","infRate"],
+        "function" : "kang_simple"
+    }
+}

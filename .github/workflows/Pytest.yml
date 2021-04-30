@@ -26,5 +26,5 @@ jobs:
       - name: Test with pytest
         run: |
           pip install pytest pytest-cov
-          pytest --cov-report=term --cov=. -s tests
+          pytest --cov-report=term --cov=code/ -s code/tests
           coverage report

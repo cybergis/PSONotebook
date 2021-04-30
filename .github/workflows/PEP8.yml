@@ -18,5 +18,5 @@ jobs:
       - name: flake8 Lint Check
         uses: py-actions/flake8@v1
         with:
-          path: "code/PSOHelper.py code/PSO.py code/cost_funcs/info.py code/cost_funcs/standard.py code/cost_funcs/JeonModelSimple.py "
+          path: "src/PSOHelper.py src/PSO.py src/cost_funcs/info.py src/cost_funcs/standard.py src/cost_funcs/JeonModelSimple.py "
           args: "--show-source --ignore E501,E722,F403,F405 --statistics"

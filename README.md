@@ -2,7 +2,7 @@
 [![Pytest](https://github.com/cybergis/PSONotebook/actions/workflows/Pytest.yml/badge.svg)](https://github.com/cybergis/PSONotebook/actions/workflows/Pytest.yml)
 ![GitHub](https://img.shields.io/github/license/cybergis/PSONotebook?style=plastic)
 
-# Introduction to Particle Swarm Optimization
+# Particle Swarm Optimization for Calibration in Spatially Explicit Agent-Based Modeling
 
 **Authors:** [Alexander Michels](https://scholar.google.com/citations?user=EbmZrwYAAAAJ), [Jeon-Young Kang](https://scholar.google.com/citations?user=u5cevWAAAAAJ), [Shaowen Wang](https://scholar.google.com/citations?user=qcUhJIcAAAAJ)
 

@@ -15,7 +15,6 @@ Here is a brief description of the parameters:
 * `gif` is a boolean that specifies whether or not you want to make a gif of the algorithm run. **SET TO FALSE FOR COMPUTATIONALLY INTENSIVE FUNCTIONS OR MODEL** because it uses 40,000 evaluations per iteration to plot the error surface.
 * `headless` is a boolean. `True` minimizes the amount printed to the terminal.
 * `max_velocity` is used to specify the maximum velocity. See the velocity determination information above for more info.
-* `metric` is the name of a function that specifies how you'd like to measure the error.
 * `output_dir` specifies the path you'd like to store outputs in, this is joined to "./outputs". So for example if you specified "test", the outputs would be stored in "./outputs/test/". This is useful for grouping together runs of the algorithm.
 * `particles` gives the number of particles.
 * `seed` is the seed for a random number generator. "None" uses no seed.
@@ -40,5 +39,19 @@ Other optional command line options include:
 
 * `-o` which will overwrite the `output_dir` parameter
 * `-s` which will overwrite the `seed` parameter
+
+If on the command line and you aren't sure, you can use the `--help` flag:
+
+```
+> python3 PSO.py --help
+
+usage: PSO.py [-h] --params PARAMS [-o OUTPUT_PREFIX] [-s RANDOM_SEED]
+
+optional arguments:
+  -h, --help        show this help message and exit
+  --params PARAMS   Path to JSON file with parameters (default: None)
+  -o OUTPUT_PREFIX  Prefix to the output directory (default: None)
+  -s RANDOM_SEED    Seed for a random number generator (default: None)
+```
 
 The code for this is in the bottom of the `main` function of `code/PSO.py` and can be easily changed if you'd like to add more CLI options.

@@ -69,8 +69,7 @@ class Particle:
             if self.position_i[i] < self.bounds[i][0] or self.position_i[i] > self.bounds[i][1]:
                 _to_evaluate = False
                 break
-        func_result = costFunc(
-            func_sel) if _to_evaluate else (float("inf"), None)
+        func_result = costFunc(func_sel) if _to_evaluate else (float("inf"), None)
         self.err_i = func_result[0]
         self.outputs = func_result[1]
 
@@ -98,8 +97,7 @@ class Particle:
 
             vel_cognitive = c1 * r1 * (self.pos_best_i[i] - self.position_i[i])
             vel_social = c2 * r2 * (pos_best_g[i] - self.position_i[i])
-            self.velocity_i[i] = k * \
-                (self.velocity_i[i] + vel_cognitive + vel_social)
+            self.velocity_i[i] = k * (self.velocity_i[i] + vel_cognitive + vel_social)
         # velocity clamping
         _norm = math.sqrt(sum([i ** 2 for i in self.velocity_i]))
         if _norm > self.vmax:
@@ -314,12 +312,10 @@ class PSO():
                     print("| {} | {} | {} ".format(str(iteration).ljust(
                         3), str(self.err_best_g).ljust(17), self.pos_best_g))
             log.debug("\n+++++ Beginning Iteration {} +++++".format(iteration))
-            log.debug("    i: {}\n    err_best: {}\n    pos_best {}".format(
-                iteration, self.err_best_g, self.pos_best_g))
+            log.debug("    i: {}\n    err_best: {}\n    pos_best {}".format(iteration, self.err_best_g, self.pos_best_g))
             results = []
             log.debug("...entering pool mapping...")
-            results = pool.map(eval_pos_unpacker, zip(self.swarm, range(
-                self.num_particles), itertools.repeat(self.costFunc), itertools.repeat(self.function)))
+            results = pool.map(eval_pos_unpacker, zip(self.swarm, range(self.num_particles), itertools.repeat(self.costFunc), itertools.repeat(self.function)))
             log.debug("...pool mapping exited...")
             results.sort()
             log.debug("...pool results sorted...")
@@ -327,8 +323,7 @@ class PSO():
             log.debug("...copying results back to main thread's copy...")
             runs = [self.swarm[i].outputs for i in range(len(self.swarm))]
             if self.costFunc == kang_simple:
-                visualize_iteration(
-                    iteration, runs, city=self.function["city"], output_dir=self.function["output_dir"])
+                visualize_iteration(iteration, runs, city=self.function["city"], output_dir=self.function["output_dir"])
             log.debug("...evaluating fitness...")
             # cycle through particles in swarm and evaluate fitness
             for j in range(self.num_particles):

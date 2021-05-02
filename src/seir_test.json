@@ -3,13 +3,13 @@
     "headless" : "False",
     "max_velocity" : "inf",
     "output_dir" : "seir_test/",
-    "particles" : 2,
+    "particles" : 4,
     "seed" : "None",
-    "threads" : 2,
+    "threads" : 5,
     "topology" : "vonNeumann",
     "termination": {
         "termination_criterion" : "iterations",
-        "max_iterations" : 2
+        "max_iterations" : 8
     },
     "function": {
         "city" : "Miami",

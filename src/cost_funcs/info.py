@@ -1,6 +1,6 @@
 import sys
 sys.path.append("../")
-from cost_funcs.JeonModelSimple import kang_simple  # noqa: E402
+from cost_funcs.JeonModelSimple import *  # noqa: E402
 from cost_funcs.standard import *  # noqa: E402
 
 
